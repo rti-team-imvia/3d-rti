@@ -56,7 +56,7 @@ def process_rti_folders(input_folder, VERBOSE):
                         
                         # Step 2.4: Define the SDM_in folder path
                         parent_folder = os.path.dirname(rti_folder_path)
-                        sdm_in_folder = os.path.join(parent_folder, "SDM_in")
+                        sdm_in_folder = os.path.join(parent_folder, "SDM_in.data")
                         
                         # Copy and rename the images into the SDM_in folder
                         copy_and_rename_images(rti_folder_path, sdm_in_folder, selected_images, VERBOSE)
