@@ -39,6 +39,15 @@ Before you begin, ensure you have met the following requirements:
     ```
 
 3. Create a virtual environment (recommended):
+
+```bash
+pyenv local 3.11.3 # If using pyenv only
+python -m venv .venv
+source .venv/Scripts/activate
+python -m pip install --upgrade pip
+pip install natsort
+```
+
 - Windows(MINGW64):
     ```bash
     python -m venv .venv
