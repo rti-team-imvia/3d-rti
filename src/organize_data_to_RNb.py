@@ -41,6 +41,8 @@ def main():
     subfolders = [f for f in os.listdir(input_folder) if os.path.isdir(os.path.join(input_folder, f))]
     subfolders = natural_sort(subfolders)
     
+    lp_copied = False  # Flag to copy the .lp file only once
+
     # Process each subfolder
     for idx, subfolder in enumerate(subfolders):
         subfolder_path = os.path.join(input_folder, subfolder)
@@ -73,6 +75,23 @@ def main():
             print(f"Copied normal_map.png to {normal_dst}")
         except FileNotFoundError:
             print(f"normal_map.png not found in {rti_folder}")
+        # Copy the .lp file from the first folder
+        if not lp_copied:
+            # Find the .lp file in the rti folder
+            lp_files = [f for f in os.listdir(rti_folder) if f.lower().endswith('.lp')]
+            if lp_files:
+                lp_src = os.path.join(rti_folder, lp_files[0])
+                lp_dst = os.path.join(output_folder, lp_files[0])
+                try:
+                    shutil.copyfile(lp_src, lp_dst)
+                    print(f"Copied {lp_files[0]} to {lp_dst}")
+                    lp_copied = True  # Only copy once
+                except Exception as e:
+                    print(f"Failed to copy {lp_files[0]}: {e}")
+            else:
+                print(f"No .lp file found in {rti_folder}")
+    if not lp_copied:
+        print("No .lp file was copied since none was found in any 'rti' folder.")
 
 if __name__ == '__main__':
     main()
