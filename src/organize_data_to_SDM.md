@@ -1,4 +1,7 @@
-# Organize_data_to_SDM
+# Organize_data_to_SDM (Deprecated)
+
+# DEPRECATED ON 2024/09/27
+We are not using SDM repository to get the normals anymore, instead we use the script src/get_normals_and_albedo.py
 
 ## Introduction:
 
