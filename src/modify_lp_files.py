@@ -1,6 +1,8 @@
 import os
 import re
+import argparse
 from natsort import natsorted
+from pathlib import Path
 
 def find_rti_folders(root_path):
     rti_folders = []
@@ -15,7 +17,7 @@ def find_rti_folders(root_path):
 def natural_sort(l):
     """Sort the given iterable in the way that humans expect."""
     convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(l, key=alphanum_key)
 
 def process_lp_file(rti_folder):
@@ -82,14 +84,24 @@ def process_lp_file(rti_folder):
         f.writelines(modified_lines)
 
 def main():
+    print('================================================================')
+    print('                     Running modify_lp_files.py                 ')
+    print('================================================================') 
 
-    # Set the experiment path manually
-    experiment_path = r'C:\Users\Deivid\Documents\rti-data\Palermo_3D\real acquisitions\head_cs'
+    # Step 1: Parse the argument for experiment path
+    parser = argparse.ArgumentParser(description='Process RTI folders and modify .lp files.')
+    parser.add_argument('--experiment_path', type=Path, required=True, help='Path to the experiment folder')
+    args = parser.parse_args()
+
+    experiment_path = args.experiment_path
+
+    if not experiment_path.exists() or not experiment_path.is_dir():
+        print(f"Error: The path {experiment_path} does not exist or is not a directory.")
+        return
 
     # Step 2: Get the list of subdirectories and sort them naturally
-    subfolders = [os.path.join(experiment_path, d) for d in os.listdir(experiment_path)
-                  if os.path.isdir(os.path.join(experiment_path, d))]
-    subfolders = natural_sort(subfolders)
+    subfolders = [f for f in experiment_path.iterdir() if f.is_dir()]
+    subfolders = natural_sort([str(f) for f in subfolders])
 
     # Step 7: Process each subfolder
     for subfolder in subfolders:
@@ -101,3 +113,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# python src/modify_lp_files.py --experiment_path "C://Users//Deivid//Documents//rti-data//Palermo_3D//real acquisitions//head_cs"
